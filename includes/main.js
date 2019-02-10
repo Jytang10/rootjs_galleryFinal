@@ -26,6 +26,7 @@ function initiateApp(){
 	makeGallery(pictures);
 	addModalCloseHandler();
 }
+
 function makeGallery(imageArray){
 	//use loops and jquery dom creation to make the html structure inside the #gallery section
 
@@ -35,18 +36,33 @@ function makeGallery(imageArray){
 		//attach a click handler to the figure you create.  call the "displayImage" function.  
 
 		//append the element to the #gallery section
-
+	for (var pictureIndex = 0; pictureIndex < imageArray.length; pictureIndex++){
+		var new_figure = $('<figure>').click(displayImage).addClass('imageGallery col-xs-12 col-sm-6 col-md-4').css('background-image', 'url(' + pictures[pictureIndex] + ')');
+		new_figure.append($('<figcaption>').text(imageArray[pictureIndex].slice(7)));
+		$('#gallery').append(new_figure);
+	}
 }
 
 function addModalCloseHandler(){
 	//add a click handler to the img element in the image modal.  When the element is clicked, close the modal
-	//for more info, check here: https://www.w3schools.com/bootstrap/bootstrap_ref_js_modal.asp	
+	//for more info, check here: https://www.w3schools.com/bootstrap/bootstrap_ref_js_modal.asp
+		$('.modal img').click(function(){
+			$('#galleryModal').modal('toggle');
+		});
 }
 
 function displayImage(){
-	//find the url of the image by grabbing the background-image source, store it in a variable
-	//grab the direct url of the image by getting rid of the other pieces you don't need
+	var changeLink = $(this).css('background-image');
+	var slash = changeLink.lastIndexOf('/');
+	changeLink = changeLink.slice(slash +1, -2);
 
+
+	$('.modal-title').text(changeLink);
+	$('.modal-body img').attr('src', 'images/' + changeLink);
+	$('#galleryModal').modal('show');
+
+	//find the url of the image by grabbing the background-image source, store it in a variable
+	//grab the direct url of the image by getting rid of the other pieces you don't need (don't need "images/")
 	//grab the name from the file url, ie the part without the path.  so "images/pexels-photo-132037.jpeg" would become
 		// pexels-photo-132037
 		//take a look at the lastIndexOf method
@@ -56,9 +72,5 @@ function displayImage(){
 
 	//show the modal with JS.  Check for more info here: 
 	//https://www.w3schools.com/bootstrap/bootstrap_ref_js_modal.asp
+
 }
-
-
-
-
-
